@@ -54,4 +54,13 @@ public class UserController {
         // convert internal representation of user back to API
         return DTOMapper.INSTANCE.convertEntityToUserGetDTO(createdUser);
     }
+    @PostMapping("/login")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public UserGetDTO logInUser(@RequestBody UserPostDTO userPostDTO){
+        User userCredentials = DTOMapper.INSTANCE.convertUserPostDTOtoEntity(userPostDTO);
+        User user = userService.logIn(userCredentials.getUsername(), userCredentials.getPassword());
+        return DTOMapper.INSTANCE.convertEntityToUserGetDTO(user);
+
+    }
 }

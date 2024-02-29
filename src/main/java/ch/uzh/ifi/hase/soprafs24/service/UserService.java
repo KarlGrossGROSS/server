@@ -51,6 +51,13 @@ public class UserService {
         log.debug("Created Information for User: {}", newUser);
         return newUser;
     }
+    public User logIn(String username, String password){
+        User userByUsername = userRepository.findByUsername(username);
+        if (!userByUsername.getPassword().equals(password)){
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Wrong password.");
+        }
+        return userByUsername;
+    }
 
     /**
      * This is a helper method that will check the uniqueness criteria of the
