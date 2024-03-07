@@ -51,6 +51,7 @@ public class UserService {
     }
 
     public User createUser(User newUser) {
+
         newUser.setToken(UUID.randomUUID().toString());
         newUser.setStatus(UserStatus.OFFLINE);
         checkIfUserExists(newUser);
@@ -79,15 +80,18 @@ public class UserService {
     }
 
     public void editUser (User userToEdit, Long id){
+        System.out.println(id);
         User wantedUser = getUser(id);
-        if (!wantedUser.getToken().equals(userToEdit.getToken())){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This request is invalid due to different tokens "+ userToEdit.getToken());
-        }
+
+
         if (!userToEdit.getUsername().equals(wantedUser.getUsername())){
             checkIfUserExists(userToEdit);
         }
-        wantedUser.setBirthday(userToEdit.getBirthday());
-        wantedUser.setUsername(userToEdit.getUsername());
+        if (userToEdit.getUsername()!=""){
+            wantedUser.setUsername(userToEdit.getUsername());
+            wantedUser.setBirthday(userToEdit.getBirthday());
+        }
+
     }
 
     public void logoutUser(Long UserId) {

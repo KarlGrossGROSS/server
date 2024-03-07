@@ -13,7 +13,17 @@ public class UserGetDTO {
   private LocalDate creation_date;
   private LocalDate birthday;
 
-    public LocalDate getBirthday() {
+  private String token;
+
+  public String getToken() {
+    return token;
+  }
+
+  public void setToken(String token) {
+    this.token = token;
+  }
+
+  public LocalDate getBirthday() {
         return birthday;
     }
     public void setBirthday(LocalDate birthday) {this.birthday=birthday;}
