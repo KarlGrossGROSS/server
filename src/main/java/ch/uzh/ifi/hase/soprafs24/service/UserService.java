@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,10 +41,21 @@ public class UserService {
         return this.userRepository.findAll();
     }
 
+    public User getUser(Long Id) {
+        //
+        User user = this.userRepository.findByid(Id);
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "This user does not exist");
+        }
+        return user;
+    }
+
     public User createUser(User newUser) {
         newUser.setToken(UUID.randomUUID().toString());
         newUser.setStatus(UserStatus.OFFLINE);
         checkIfUserExists(newUser);
+        newUser.setCreation_date(LocalDate.now());
+        newUser.setStatus(UserStatus.ONLINE);
         // saves the given entity but data is only persisted in the database once
         // flush() is called
         newUser = userRepository.save(newUser);
@@ -52,12 +65,51 @@ public class UserService {
         return newUser;
     }
     public User logIn(String username, String password){
+        //
         User userByUsername = userRepository.findByUsername(username);
+        if (userByUsername==null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Sign up first!");
+        }
         if (!userByUsername.getPassword().equals(password)){
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Wrong password.");
         }
+        userByUsername.setStatus(UserStatus.ONLINE);
+        userRepository.flush();
         return userByUsername;
     }
+
+    public void editUser (User userToEdit, Long id){
+        User wantedUser = getUser(id);
+        if (!wantedUser.getToken().equals(userToEdit.getToken())){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This request is invalid due to different tokens "+ userToEdit.getToken());
+        }
+        if (!userToEdit.getUsername().equals(wantedUser.getUsername())){
+            checkIfUserExists(userToEdit);
+        }
+        wantedUser.setBirthday(userToEdit.getBirthday());
+        wantedUser.setUsername(userToEdit.getUsername());
+    }
+
+    public void logoutUser(Long UserId) {
+        User userByID = null;
+
+        List<User> usersByUsername = userRepository.findAll();
+
+        for (User user : usersByUsername) {
+            if (user.getId().equals(UserId)) {
+                userByID = user;
+            }
+        }
+        if (userByID == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        }
+        userByID.setStatus(UserStatus.OFFLINE);
+        userRepository.save(userByID);
+        userRepository.flush();
+
+    }
+
+
 
     /**
      * This is a helper method that will check the uniqueness criteria of the
