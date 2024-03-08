@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
+import java.util.Date;
 
 /**
  * User Service
@@ -55,7 +56,7 @@ public class UserService {
         newUser.setToken(UUID.randomUUID().toString());
         newUser.setStatus(UserStatus.OFFLINE);
         checkIfUserExists(newUser);
-        newUser.setCreation_date(LocalDate.now());
+        newUser.setCreation_date(new Date());
         newUser.setStatus(UserStatus.ONLINE);
         // saves the given entity but data is only persisted in the database once
         // flush() is called
@@ -89,7 +90,11 @@ public class UserService {
         }
         if (userToEdit.getUsername()!=""){
             wantedUser.setUsername(userToEdit.getUsername());
+
+        }
+        if (userToEdit.getBirthday()!=null){
             wantedUser.setBirthday(userToEdit.getBirthday());
+
         }
 
     }
