@@ -35,18 +35,18 @@ public class User implements Serializable {
   @Column(nullable = false)
   private UserStatus status;
 
-  @Column(nullable = false)
-  private Date creation_date;
+  @Column(nullable = true)
+  private LocalDate creation_date;
 
-  @Column(nullable = false, unique = true)
+  @Column(nullable = false)
   private String password;
 
   @Column(nullable = true)
-  private Date birthday;
+  private LocalDate birthday;
 
-  public Date getBirthday() { return birthday; }
+  public LocalDate getBirthday() { return birthday; }
 
-  public void setBirthday(Date birthDate) { this.birthday = birthDate; }
+  public void setBirthday(LocalDate birthDate) { this.birthday = birthDate; }
 
   public Long getId() {
     return id;
@@ -56,10 +56,10 @@ public class User implements Serializable {
     this.id = id;
   }
 
-  public void setCreation_date(Date creation_date) {
+  public void setCreation_date(LocalDate creation_date) {
     this.creation_date = creation_date; }
 
-  public Date getCreation_date() {
+  public LocalDate getCreation_date() {
     return creation_date;
   }
 

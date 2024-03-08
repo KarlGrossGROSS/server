@@ -10,8 +10,8 @@ public class UserGetDTO {
   private String username;
   private UserStatus status;
   private String password;
-  private Date creation_date;
-  private Date birthday;
+  private LocalDate creation_date;
+  private LocalDate birthday;
 
   private String token;
 
@@ -23,10 +23,10 @@ public class UserGetDTO {
     this.token = token;
   }
 
-  public Date getBirthday() {
+  public LocalDate getBirthday() {
         return birthday;
     }
-    public void setBirthday(Date birthday) {this.birthday=birthday;}
+    public void setBirthday(LocalDate birthday) {this.birthday=birthday;}
 
     public Long getId() {
     return id;
@@ -58,6 +58,6 @@ public class UserGetDTO {
     this.status = status;
   }
 
-  public Date getCreation_date() { return creation_date; }
-  public void setCreation_date(Date creation_date) {  this.creation_date = creation_date; }
+  public LocalDate getCreation_date() { return creation_date; }
+  public void setCreation_date(LocalDate creation_date) {  this.creation_date = creation_date; }
 }

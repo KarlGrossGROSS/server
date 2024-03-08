@@ -16,7 +16,6 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
-import java.util.Date;
 
 /**
  * User Service
@@ -56,8 +55,7 @@ public class UserService {
         newUser.setToken(UUID.randomUUID().toString());
         newUser.setStatus(UserStatus.OFFLINE);
         checkIfUserExists(newUser);
-        newUser.setCreation_date(new Date());
-        newUser.setStatus(UserStatus.ONLINE);
+        newUser.setCreation_date(LocalDate.now());
         // saves the given entity but data is only persisted in the database once
         // flush() is called
         newUser = userRepository.save(newUser);
@@ -75,9 +73,15 @@ public class UserService {
         if (!userByUsername.getPassword().equals(password)){
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Wrong password.");
         }
-        userByUsername.setStatus(UserStatus.ONLINE);
         userRepository.flush();
         return userByUsername;
+    }
+    public void status(String username){
+        User user = userRepository.findByUsername(username);
+        if (user!= null){
+            user.setStatus(UserStatus.ONLINE);
+            userRepository.saveAndFlush(user);
+        }
     }
 
     public void editUser (User userToEdit, Long id){

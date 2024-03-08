@@ -7,16 +7,16 @@ import java.util.Date;
 public class UserPutDTO {
 
     private String username;
-    private Date birthday;
+    private LocalDate birthday;
     private String token;
 
     public String getToken() { return token; }
 
     public void setToken(String token){ this.token = token; }
-    public Date getBirthday() {
+    public LocalDate getBirthday() {
         return birthday;
     }
-    public void setBirthday(Date birthday) {this.birthday=birthday;}
+    public void setBirthday(LocalDate birthday) { this.birthday=birthday; }
 
 
     public String getUsername() {

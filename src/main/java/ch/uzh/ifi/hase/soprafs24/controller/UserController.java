@@ -42,6 +42,10 @@ public class UserController {
         }
         return userGetDTOs;
     }
+    @PutMapping("/status/{username}")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public void status(@PathVariable String username){userService.status(username);}
 
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
