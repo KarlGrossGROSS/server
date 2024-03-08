@@ -11,8 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -85,9 +83,11 @@ public class UserService {
     }
 
     public void editUser (User userToEdit, Long id){
-        System.out.println(id);
-        User wantedUser = getUser(id);
 
+        User wantedUser = this.userRepository.findByid(id);
+        if (wantedUser == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "This user does not exist");
+        }
 
         if (!userToEdit.getUsername().equals(wantedUser.getUsername())){
             checkIfUserExists(userToEdit);
@@ -139,12 +139,10 @@ public class UserService {
 
         String baseErrorMessage = "The %s provided %s not unique. Therefore, the user could not be created!";
         if (userByUsername != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
                     String.format(baseErrorMessage, "username", "is"));
         }
-        else if (userByUsername != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format(baseErrorMessage, "username", "is"));
-        }
+
     }
 
 
